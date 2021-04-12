@@ -16,5 +16,10 @@
         <div class="ball" style="left: 200px; top: 150px;"></div>
         <div class="player2 player" style="top: 425px;"></div>
     </div>
+    <p><label>Player: </label><input id="id" type="number"  onchange="_playerId = document.getElementById('id').value" /></p>
+    <p><label>Name: </label><input id="name" type="text" onchange="_playerName = document.getElementById('name').value" /></p>
+
+    <script src="~/lib/dist/browser/signalr.js"></script>
+    <script src="~/js/app.js"></script>
 </body>
 </html>

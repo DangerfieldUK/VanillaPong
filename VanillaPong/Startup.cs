@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VanillaPong.GameCode;
+using VanillaPong.Hubs;
 
 namespace VanillaPong
 {
@@ -19,6 +21,12 @@ namespace VanillaPong
             // add the razor pages service
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
+
+            // add signalr for realtime messaging
+            services.AddSignalR();
+
+            // add a singleton for our game
+            services.AddSingleton<GameState>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +48,7 @@ namespace VanillaPong
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHub<GameHub>("/gameHub");
             });
         }
     }

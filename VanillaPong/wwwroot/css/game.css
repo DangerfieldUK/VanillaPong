@@ -1,5 +1,6 @@
 ﻿body {
     background: black;
+    color: white;
 }
 
 /* game */
@@ -43,7 +44,7 @@
 
 /* scores */
 .scores {
-    width: 100px;
+    width: 500px;
     margin: 0 auto;
     overflow: hidden;
     margin-bottom: 10px;
@@ -57,4 +58,9 @@
 }
 .scores .score.score2 {
     float: right;
+}
+
+.reset {
+    display: block;
+    margin: 0 auto;
 }
