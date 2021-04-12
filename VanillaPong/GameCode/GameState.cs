@@ -34,6 +34,26 @@ namespace VanillaPong.GameCode
                         Player2PosTop++;
                     break;
             }
+
+            Update();
         }
+
+        internal void Update()
+        {
+            if (BallLeft < 0)
+                ballDirection = 1;
+            if (BallLeft > 1000)
+                ballDirection = -1;
+            BallLeft = BallLeft + ballDirection;
+
+            if (BallTop < 0)
+                ballVDirection = 1;
+            if (BallTop > 625)
+                ballVDirection = -1;
+            BallTop = BallTop + ballVDirection;
+        }
+
+        private int ballDirection { get; set; } = -1;
+        private int ballVDirection { get; set; } = -1;
     }
 }

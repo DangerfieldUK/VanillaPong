@@ -34,7 +34,7 @@ namespace VanillaPong.Hubs
                     break;
 
                 default:
-
+                    _state.Update();
                     break;
             }
 
