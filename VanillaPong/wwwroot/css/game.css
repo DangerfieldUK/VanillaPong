@@ -1,6 +1,26 @@
 ﻿body {
     background: black;
     color: white;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* connecting */
+#connecting {
+    margin: 0 auto;
+    width: 1000px;
+    padding: 10px;
+}
+
+/* lobbies */
+.lobbies {
+    margin: 0 auto;
+    width: 1000px;
+    border: 2px solid white;
+    padding: 10px;
 }
 
 /* game */
@@ -50,7 +70,7 @@
     margin-bottom: 10px;
 }
 .scores .score {
-    font: 32px fixedsys;
+    font: 32px;
     color: white;
 }
 .scores .score.score1 {

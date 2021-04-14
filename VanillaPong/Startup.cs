@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -25,8 +26,10 @@ namespace VanillaPong
             // add signalr for realtime messaging
             services.AddSignalR();
 
-            // add a singleton for our game
-            services.AddSingleton<GameState>();
+            // add singleton for hub state
+            services.AddSingleton<HubState>();
+            // add singleton for lobby state sender
+            services.AddSingleton<LobbyStateSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

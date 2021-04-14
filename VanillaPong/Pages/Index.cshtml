@@ -4,20 +4,53 @@
 }
 <html>
 <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <link href="~/css/game.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="scores">
+    <div id="connecting">
+        <marquee><p>Connecting . . . .</p></marquee>
+    </div>
+    <div class="lobbies" style="display: none;">
+        <h1>Pong, by DangerfieldUK &amp; IDontByte</h1>
+        <h3>Lobbies</h3>
+        <div class="lobbies-player">
+            <p>Enter your name</p>
+            <p>
+                <label>Name: </label>
+                <input id="name" type="text" onchange="_playerName = document.getElementById('name').value" />
+            </p>
+            <button id="nameSubmit">Continue</button>
+        </div>
+        <div class="lobbies-panel" style="display:none;">
+            <p>Welcome <span id="name-display"></span></p>
+
+            <h4>Create Lobby</h4>
+            <p>
+                <label>New Lobby Name: </label>
+                <input id="newLobbyName" type="text" onchange="_lobbyName = document.getElementById('newLobbyName').value" />
+                <button id="newLobbyCreate">Create Lobby</button>
+            </p>
+            
+            <p>Or...</p>
+
+            <h4>Join Lobby</h4>
+            <ul class="lobbies-list">
+                <li>Example <button>Join</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="scores" style="display:none;">
         <div class="score1 score">0</div>
         <div class="score2 score">0</div>
     </div>
-    <div class="game">
+    <div class="game" style="display:none;">
         <div class="player1 player" style="top: 0;"></div>
         <div class="ball" style="left: 200px; top: 150px;"></div>
         <div class="player2 player" style="top: 425px;"></div>
     </div>
-    <p><label>Player: </label><input id="id" type="number"  onchange="_playerId = document.getElementById('id').value" /></p>
-    <p><label>Name: </label><input id="name" type="text" onchange="_playerName = document.getElementById('name').value" /></p>
 
     <script src="~/lib/dist/browser/signalr.js"></script>
     <script src="~/js/app.js"></script>

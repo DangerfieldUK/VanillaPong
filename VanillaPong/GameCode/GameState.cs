@@ -14,7 +14,7 @@ namespace VanillaPong.GameCode
         public int Player1Score { get; set; } = 0;
         public int Player2Score { get; set; } = 0;
         public string Player1Name { get; set; } = "Player 1";
-        public string Player2Name { get; set; } = "Player 2";
+        public string Player2Name { get; set; } = "Awaiting player...";
 
         public void MovePlayer(int player, string direction)
         {
@@ -34,8 +34,6 @@ namespace VanillaPong.GameCode
                         Player2PosTop++;
                     break;
             }
-
-            Update();
         }
 
         internal void Update()
