@@ -46,11 +46,24 @@ namespace VanillaPong.Hubs
                     Name = lobbyName,
                     State = new GameState() { Player1Name = playerName }
                 });
+                var lobby = _hubState.Lobbies.Where(l => l.Name == lobbyName).Single();
                 await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, "lobby");
+                await Clients.Caller.SendAsync("CheckLobbyName", true, lobby.State);
                 await Clients.Groups("lobby").SendAsync("LobbyUpdate", _hubState.Lobbies);
-                await Clients.Caller.SendAsync("CheckLobbyName", true);
             }
+        }
+
+        public async Task JoinExistingLobby(string lobbyName, string playerName)
+        {
+            // get the lobby
+            var lobby = _hubState.Lobbies.Where(l => l.Name == lobbyName).Single();
+
+            lobby.State.Player2Name = playerName;
+
+            await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "lobby");
+            await Clients.Caller.SendAsync("JoinExistingLobby", lobby.State);
         }
 
         //public async Task SendKey(int player, string key, string playerName)

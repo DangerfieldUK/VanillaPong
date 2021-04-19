@@ -19,7 +19,7 @@
             <p>Enter your name</p>
             <p>
                 <label>Name: </label>
-                <input id="name" type="text" onchange="_playerName = document.getElementById('name').value" />
+                <input id="name" type="text" onchange="VP.Lobby.PlayerName = document.getElementById('name').value" />
             </p>
             <button id="nameSubmit">Continue</button>
         </div>
@@ -29,15 +29,14 @@
             <h4>Create Lobby</h4>
             <p>
                 <label>New Lobby Name: </label>
-                <input id="newLobbyName" type="text" onchange="_lobbyName = document.getElementById('newLobbyName').value" />
+                <input id="newLobbyName" type="text" onchange="VP.Lobby.LobbyName = document.getElementById('newLobbyName').value" />
                 <button id="newLobbyCreate">Create Lobby</button>
             </p>
-            
+
             <p>Or...</p>
 
             <h4>Join Lobby</h4>
             <ul class="lobbies-list">
-                <li>Example <button>Join</button></li>
             </ul>
         </div>
     </div>
@@ -53,6 +52,10 @@
     </div>
 
     <script src="~/lib/dist/browser/signalr.js"></script>
+    <script src="~/js/vendor/extend.js"></script>
+    <script src="~/js/_shared.js"></script>
+    <script src="~/js/_lobby.js"></script>
+    <script src="~/js/_game.js"></script>
     <script src="~/js/app.js"></script>
 </body>
 </html>
