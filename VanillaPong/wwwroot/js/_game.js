@@ -132,7 +132,7 @@ VP.Game = {
     SendServerBatLocation: function () {
         var topVal = parseInt(VP.Game.MyBat().style.top, 10);
         VP.Game.MyLocations.push(topVal);
-        if (VP.Game.MyLocations.length == 5) {
+        if (VP.Game.MyLocations.length == 10) {
             VP.Shared.Connection.invoke("SendLocation", VP.Lobby.LobbyName, VP.Game.Player, VP.Game.MyLocations).catch(function (err) {
                 return alert(err.toString());
             });

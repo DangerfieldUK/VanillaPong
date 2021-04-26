@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using VanillaPong.GameCode;
+using VanillaPong.Models;
 
 namespace VanillaPong.Hubs
 {
@@ -52,7 +53,6 @@ namespace VanillaPong.Hubs
 
         public async Task JoinExistingLobby(string lobbyName, string playerName)
         {
-            // get the lobby
             _hubService.SetPlayer2Name(playerName, lobbyName);
             var lobby = _hubService.GetHubState().Lobbies.Where(l => l.Name == lobbyName).Single();
 
@@ -64,8 +64,7 @@ namespace VanillaPong.Hubs
 
         public async Task SendLocation(string lobbyName, int playerNumber, int[] topVals)
         {
-            // get the lobby
-            _hubService.SendLocation(lobbyName, playerNumber, topVals);
+            _hubService.SaveLocations(lobbyName, playerNumber, topVals);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using VanillaPong.Hubs;
+using VanillaPong.Models;
 
 namespace VanillaPong.GameCode
 {

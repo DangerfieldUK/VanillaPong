@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VanillaPong.GameCode;
 using VanillaPong.Hubs;
+using VanillaPong.Models;
 
 namespace VanillaPong
 {

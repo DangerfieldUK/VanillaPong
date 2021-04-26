@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using VanillaPong.Models;
 
 namespace VanillaPong.GameCode
 {
@@ -59,9 +61,30 @@ namespace VanillaPong.GameCode
             return _hubState.Lobbies.Where(l => l.Name == lobbyName).Single();
         }
 
-        internal void SendLocation(string lobbyName, int playerNumber, int[] topVal)
+        internal void SaveLocations(string lobbyName, int playerNumber, int[] locations)
         {
-            _hubState.SendLocation(lobbyName, playerNumber, topVal);
+            var lobby = GetLobby(lobbyName);
+            var timeStamp = DateTime.Now.Subtract(TimeSpan.FromMilliseconds(locations.Length * 10));
+            var playerLocations = new List<PlayerLocation>();
+            foreach (var loc in locations)
+            {
+                playerLocations.Add(new PlayerLocation()
+                {
+                    Position = loc,
+                    TimeStamp = timeStamp.Ticks
+                });
+                timeStamp = timeStamp.AddMilliseconds(10);
+            }
+            switch (playerNumber)
+            {
+                case 1:
+                    lobby.State.Player1Locations.AddRange(playerLocations);
+                    break;
+
+                case 2:
+                    lobby.State.Player2Locations.AddRange(playerLocations);
+                    break;
+            }
         }
     }
 }
