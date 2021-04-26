@@ -48,7 +48,7 @@ namespace VanillaPong.Hubs
                 await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, "lobby");
                 await Clients.Caller.SendAsync("CheckLobbyName", true, lobby.State);
-                await Clients.Groups("lobby").SendAsync("LobbyUpdate", lobby);
+                await Clients.Groups("lobby").SendAsync("LobbyUpdate", _hubService.GetHubState().Lobbies.Where(l => l.State.ReadyToStart == false));
             }
         }
 
@@ -64,35 +64,10 @@ namespace VanillaPong.Hubs
             await Clients.Groups(lobbyName).SendAsync("StateUpdate", lobby.State); 
         }
 
-        public async Task SendLocation(string lobbyName, int playerNumber, int topVal)
+        public async Task SendLocation(string lobbyName, int playerNumber, int[] topVals)
         {
             // get the lobby
-            _hubService.SendLocation(lobbyName, playerNumber, topVal);
+            _hubService.SendLocation(lobbyName, playerNumber, topVals);
         }
-
-        //public async Task SendKey(int player, string key, string playerName)
-        //{
-        //    if (player == 1)
-        //        _state.Player1Name = playerName;
-        //    if (player == 2)
-        //        _state.Player2Name = playerName;
-
-        //    switch (key)
-        //    {
-        //        case "UP":
-        //            _state.MovePlayer(player, key);
-        //            break;
-
-        //        case "DOWN":
-        //            _state.MovePlayer(player, key);
-        //            break;
-
-        //        default:
-        //            _state.Update();
-        //            break;
-        //    }
-
-        //    await Clients.All.SendAsync("GameState", _state, player);
-        //}
     }
 }

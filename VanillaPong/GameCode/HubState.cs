@@ -19,23 +19,28 @@ namespace VanillaPong.GameCode
             lobby.State.ReadyToStart = true;
         }
 
-        internal void SendLocation(string lobbyName, int playerNumber, int topVal)
+        internal void SendLocation(string lobbyName, int playerNumber, int[] topVals)
         {
             var lobby = Lobbies.Where(l => l.Name == lobbyName).Single();
-            var timeStamp = DateTime.Now;
-            var playerLocation = new PlayerLocation()
+            var timeStamp = DateTime.Now.Subtract(TimeSpan.FromMilliseconds(topVals.Length * 10));
+            var playerLocations = new List<PlayerLocation>();
+            foreach (var loc in topVals)
             {
-                Position = topVal,
-                TimeStamp = timeStamp.Ticks
-            };
+                playerLocations.Add(new PlayerLocation()
+                {
+                    Position = loc,
+                    TimeStamp = timeStamp.Ticks
+                });
+                timeStamp = timeStamp.AddMilliseconds(10);
+            }
             switch (playerNumber)
             {
                 case 1:
-                    lobby.State.Player1Locations.Add(playerLocation);
+                    lobby.State.Player1Locations.AddRange(playerLocations);
                     break;
 
                 case 2:
-                    lobby.State.Player2Locations.Add(playerLocation);
+                    lobby.State.Player2Locations.AddRange(playerLocations);
                     break;
             }
         }

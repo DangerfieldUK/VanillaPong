@@ -63,9 +63,9 @@ namespace VanillaPong.GameCode
             return _hubState.Lobbies.Where(l => l.Name == lobbyName).Single();
         }
 
-        internal void SendLocation(string lobbyName, int playerNumber, int topVal)
+        internal void SendLocation(string lobbyName, int playerNumber, int[] topVal)
         {
             _hubState.SendLocation(lobbyName, playerNumber, topVal);
-        } 
+        }
     }
 }

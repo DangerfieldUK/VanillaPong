@@ -41,7 +41,7 @@ VP.Game = {
         VP.Shared.Connection.on('StateUpdate', function (state) {
             VP.Game.State = state;
             VP.Game.StateUpdate();
-            
+
         });
     },
 
@@ -105,7 +105,6 @@ VP.Game = {
                 if (VP.Game.OpponentLastLocTimeStamp < loc.timeStamp) {
                     VP.Game.OpponentLastLocTimeStamp = loc.timeStamp;
                     VP.Game.OpponentBat().style.top = loc.position + "px";
-                    console.log(loc.position);
                     break;
                 }
             }
@@ -128,11 +127,17 @@ VP.Game = {
         }
     },
 
-    SendServerBatLocation: function() {
+    MyLocations: [],
+
+    SendServerBatLocation: function () {
         var topVal = parseInt(VP.Game.MyBat().style.top, 10);
-        VP.Shared.Connection.invoke("SendLocation", VP.Lobby.LobbyName, VP.Game.Player, topVal).catch(function (err) {
-            return alert(err.toString());
-        });
+        VP.Game.MyLocations.push(topVal);
+        if (VP.Game.MyLocations.length == 5) {
+            VP.Shared.Connection.invoke("SendLocation", VP.Lobby.LobbyName, VP.Game.Player, VP.Game.MyLocations).catch(function (err) {
+                return alert(err.toString());
+            });
+            VP.Game.MyLocations = [];
+        }
     },
 
     ClientLoop: function () {
