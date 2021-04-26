@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using VanillaPong.GameCode;
 
 namespace VanillaPong.Models
 {

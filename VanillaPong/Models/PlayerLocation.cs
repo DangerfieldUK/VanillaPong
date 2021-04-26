@@ -1,4 +1,4 @@
-﻿namespace VanillaPong.GameCode
+﻿namespace VanillaPong.Models
 {
     public class PlayerLocation
     {
