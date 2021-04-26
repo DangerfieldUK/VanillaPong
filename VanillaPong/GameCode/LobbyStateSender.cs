@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using VanillaPong.Hubs;
 
 namespace VanillaPong.GameCode
@@ -14,7 +11,7 @@ namespace VanillaPong.GameCode
         private IHubContext<GameHub> _gameHubContext;
         Timer _tm;
 
-        public LobbyStateSender(HubService hubService, IHubContext<GameHub> gameHubContext) 
+        public LobbyStateSender(HubService hubService, IHubContext<GameHub> gameHubContext)
         {
             _gameHubContext = gameHubContext;
             _hubService = hubService;

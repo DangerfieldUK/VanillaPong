@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VanillaPong.GameCode;
@@ -21,7 +19,7 @@ namespace VanillaPong.Hubs
             if (_hubService.GetHubState().Players.Contains(name))
             {
                 await Clients.Caller.SendAsync("CheckName", false);
-            } 
+            }
             else
             {
                 _hubService.AddPlayer(name);
@@ -61,7 +59,7 @@ namespace VanillaPong.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "lobby");
             await Clients.Caller.SendAsync("JoinExistingLobby", lobby.State);
-            await Clients.Groups(lobbyName).SendAsync("StateUpdate", lobby.State); 
+            await Clients.Groups(lobbyName).SendAsync("StateUpdate", lobby.State);
         }
 
         public async Task SendLocation(string lobbyName, int playerNumber, int[] topVals)

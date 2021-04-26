@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace VanillaPong.GameCode
+﻿namespace VanillaPong.GameCode
 {
     public class PlayerLocation
     {
