@@ -32,35 +32,55 @@ button {
     background: black;
     border: 2px solid white;
 }
-.game::before {
-    content: '';
-    position: absolute;
-    border-right: 2px solid white;
-    top: 0;
-    bottom: 0;
-    left: 499px;
-}
 
-.game .ball {
-    display: block;
-    width: 1px;
-    height: 1px;
-    position: absolute;
-    border: 10px solid white;
-}
-.game .player {
-    width: 1px;
-    height: 200px;
-    border-left: 10px solid white;
-    border-right: 10px solid white;
-    position: absolute;
-}
-.game .player.player1 {
-    left: 0;
-}
-.game .player.player2 {
-    right: 0;
-}
+    .game::before {
+        content: '';
+        position: absolute;
+        border-right: 2px solid white;
+        top: 0;
+        bottom: 0;
+        left: 499px;
+    }
+
+    .game #startplay {
+        text-align: left;
+        padding: 40px;
+    }
+
+        .game #startplay.p2 {
+            text-align: right;
+        }
+
+        .game #startplay h2 {
+            border: 1px solid white;
+            background: black;
+            display: inline-block;
+            padding: 10px;
+        }
+
+    .game .ball {
+        display: block;
+        width: 1px;
+        height: 1px;
+        position: absolute;
+        border: 10px solid white;
+    }
+
+    .game .player {
+        width: 1px;
+        height: 200px;
+        border-left: 10px solid white;
+        border-right: 10px solid white;
+        position: absolute;
+    }
+
+        .game .player.player1 {
+            left: 0;
+        }
+
+        .game .player.player2 {
+            right: 0;
+        }
 
 /* scores */
 .scores {
@@ -69,16 +89,19 @@ button {
     overflow: hidden;
     margin-bottom: 10px;
 }
-.scores .score {
-    font: 32px;
-    color: white;
-}
-.scores .score.score1 {
-    float: left;
-}
-.scores .score.score2 {
-    float: right;
-}
+
+    .scores .score {
+        font: 32px;
+        color: white;
+    }
+
+        .scores .score.score1 {
+            float: left;
+        }
+
+        .scores .score.score2 {
+            float: right;
+        }
 
 .reset {
     display: block;

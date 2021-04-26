@@ -57,26 +57,27 @@ VP.Lobby = {
             })
         });
 
-        // Server sent Create Lobby response
+        // Server sent Create Lobby response (Player 1)
         VP.Shared.Connection.on("CheckLobbyName", function (ok, state) {
             if (ok === true) {
                 VP.Game.State = state;
                 VP.Lobby.Element_LobbyContainer.style.display = "none";
                 VP.Game.Element_GameContainer.style.display = "block";
                 VP.Game.Element_Scores.style.display = "block";
-                VP.Game.UpdateNamesAndScoresFromState();
+                VP.Game.Init();
             } else {
                 alert("Sorry, that lobby already exists.. please try another name.")
             }
         });
 
-        // Server sent Join Existing Lobby response
+        // Server sent Join Existing Lobby response (Player 2)
         VP.Shared.Connection.on("JoinExistingLobby", function (state) {
             VP.Game.State = state;
             VP.Lobby.Element_LobbyContainer.style.display = "none";
             VP.Game.Element_GameContainer.style.display = "block";
             VP.Game.Element_Scores.style.display = "block";
-            VP.Game.UpdateNamesAndScoresFromState();
+            VP.Game.Player = 2;
+            VP.Game.Init();
         });
     },
 

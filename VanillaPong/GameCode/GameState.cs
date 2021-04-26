@@ -15,7 +15,9 @@ namespace VanillaPong.GameCode
         public int Player2Score { get; set; } = 0;
         public string Player1Name { get; set; } = "Player 1";
         public string Player2Name { get; set; } = "Awaiting player...";
-
+        public bool ReadyToStart { get; set; } = false;
+        public bool InPlay { get; set; } = false;
+        
         public void MovePlayer(int player, string direction)
         {
             switch (direction)

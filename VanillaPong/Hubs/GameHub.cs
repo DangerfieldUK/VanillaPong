@@ -60,10 +60,12 @@ namespace VanillaPong.Hubs
             var lobby = _hubState.Lobbies.Where(l => l.Name == lobbyName).Single();
 
             lobby.State.Player2Name = playerName;
+            lobby.State.ReadyToStart = true;
 
             await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "lobby");
             await Clients.Caller.SendAsync("JoinExistingLobby", lobby.State);
+            await Clients.Groups(lobbyName).SendAsync("StateUpdate", lobby.State); 
         }
 
         //public async Task SendKey(int player, string key, string playerName)
