@@ -10,34 +10,33 @@ namespace VanillaPong.GameCode
 {
     public class LobbyStateSender
     {
+        private HubService _hubService;
         private IHubContext<GameHub> _gameHubContext;
-        private readonly HubState _hubState;
         Timer _tm;
 
-        public LobbyStateSender(IHubContext<GameHub> gameHubContext, HubState hubState)
+        public LobbyStateSender(HubService hubService, IHubContext<GameHub> gameHubContext) 
         {
             _gameHubContext = gameHubContext;
-            _hubState = hubState;
-
+            _hubService = hubService;
             _tm = new Timer(
                 UpdateLobbies,
                 null,
-                40,
-                40);
+                100,
+                100);
         }
 
         protected void UpdateLobbies(object state)
         {
-            foreach (var lobby in _hubState.Lobbies)
+            _hubService.UpdateLobbies();
+            SendStates(_hubService.GetLobbies());
+        }
+        internal void SendStates(List<Lobby> lobbies)
+        {
+            foreach (var lobby in lobbies)
             {
-                if (lobby.Name != null)
-                {
-                    lobby.State.Update();
-                    _gameHubContext.Clients.Groups(lobby.Name).SendAsync("GameState", lobby.State);
-                }
+                _gameHubContext.Clients.Groups(lobby.Name).SendAsync("StateUpdate", lobby.State);
+                _hubService.MarkLocationsSent(lobby.Name);
             }
         }
-
-       
     }
 }

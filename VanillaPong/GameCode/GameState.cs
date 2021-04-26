@@ -17,43 +17,30 @@ namespace VanillaPong.GameCode
         public string Player2Name { get; set; } = "Awaiting player...";
         public bool ReadyToStart { get; set; } = false;
         public bool InPlay { get; set; } = false;
-        
-        public void MovePlayer(int player, string direction)
-        {
-            switch (direction)
-            {
-                case "UP":
-                    if (player == 1)
-                        Player1PosTop--;
-                    if (player == 2)
-                        Player2PosTop--;
-                    break;
 
-                case "DOWN":
-                    if (player == 1)
-                        Player1PosTop++;
-                    if (player == 2)
-                        Player2PosTop++;
-                    break;
-            }
-        }
+        public List<PlayerLocation> Player1Locations { get; set; } = new List<PlayerLocation>();
+
+        public List<PlayerLocation> Player2Locations { get; set; } = new List<PlayerLocation>();
 
         internal void Update()
         {
-            if (BallLeft < 0)
-                ballDirection = 4;
-            if (BallLeft > 1000)
-                ballDirection = -4;
-            BallLeft = BallLeft + ballDirection;
+            Player1Locations = Player1Locations.Where(p => p.Sent == false).ToList();
+            Player2Locations = Player2Locations.Where(p => p.Sent == false).ToList();
 
-            if (BallTop < 0)
-                ballVDirection = 4;
-            if (BallTop > 625)
-                ballVDirection = -4;
-            BallTop = BallTop + ballVDirection;
+            //if (BallLeft < 0)
+            //    ballDirection = 4;
+            //if (BallLeft > 1000)
+            //    ballDirection = -4;
+            //BallLeft = BallLeft + ballDirection;
+
+            //if (BallTop < 0)
+            //    ballVDirection = 4;
+            //if (BallTop > 625)
+            //    ballVDirection = -4;
+            //BallTop = BallTop + ballVDirection;
         }
 
-        private int ballDirection { get; set; } = -4;
-        private int ballVDirection { get; set; } = -4;
+        //private int ballDirection { get; set; } = -4;
+        //private int ballVDirection { get; set; } = -4;
     }
 }

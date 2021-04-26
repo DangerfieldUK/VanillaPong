@@ -9,63 +9,65 @@ namespace VanillaPong.Hubs
 {
     public class GameHub : Hub
     {
-        private readonly HubState _hubState;
-        private readonly LobbyStateSender _lobbyStateSender;
+        private readonly HubService _hubService;
 
-        public GameHub(HubState hubState, LobbyStateSender lobbyStateSender)
+        public GameHub(HubService hubService, LobbyStateSender lobbyStateSender)
         {
-            _hubState = hubState;
-            _lobbyStateSender = lobbyStateSender;
+            _hubService = hubService;
         }
 
         public async Task CheckName(string name)
         {
-            if (_hubState.Players.Contains(name))
+            if (_hubService.GetHubState().Players.Contains(name))
             {
                 await Clients.Caller.SendAsync("CheckName", false);
-            }
+            } 
             else
             {
-                _hubState.Players.Add(name);
+                _hubService.AddPlayer(name);
                 await Groups.AddToGroupAsync(Context.ConnectionId, "lobby");
-                await Clients.Caller.SendAsync("LobbyUpdate", _hubState.Lobbies);
+                await Clients.Caller.SendAsync("LobbyUpdate", _hubService.GetHubState().Lobbies);
                 await Clients.Caller.SendAsync("CheckName", true);
             }
         }
 
         public async Task CheckLobbyName(string lobbyName, string playerName)
         {
-            if (_hubState.Lobbies.Any(l => l.Name == lobbyName) && lobbyName != "lobby")
+            if (_hubService.GetHubState().Lobbies.Any(l => l.Name == lobbyName) && lobbyName != "lobby")
             {
                 await Clients.Caller.SendAsync("CheckLobbyName", false);
             }
             else
             {
-                _hubState.Lobbies.Add(new Lobby()
+                _hubService.AddLobby(new Lobby()
                 {
                     Name = lobbyName,
                     State = new GameState() { Player1Name = playerName }
                 });
-                var lobby = _hubState.Lobbies.Where(l => l.Name == lobbyName).Single();
+                var lobby = _hubService.GetHubState().Lobbies.Where(l => l.Name == lobbyName).Single();
                 await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, "lobby");
                 await Clients.Caller.SendAsync("CheckLobbyName", true, lobby.State);
-                await Clients.Groups("lobby").SendAsync("LobbyUpdate", _hubState.Lobbies);
+                await Clients.Groups("lobby").SendAsync("LobbyUpdate", lobby);
             }
         }
 
         public async Task JoinExistingLobby(string lobbyName, string playerName)
         {
             // get the lobby
-            var lobby = _hubState.Lobbies.Where(l => l.Name == lobbyName).Single();
-
-            lobby.State.Player2Name = playerName;
-            lobby.State.ReadyToStart = true;
+            _hubService.SetPlayer2Name(playerName, lobbyName);
+            var lobby = _hubService.GetHubState().Lobbies.Where(l => l.Name == lobbyName).Single();
 
             await Groups.AddToGroupAsync(Context.ConnectionId, lobbyName);
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, "lobby");
             await Clients.Caller.SendAsync("JoinExistingLobby", lobby.State);
             await Clients.Groups(lobbyName).SendAsync("StateUpdate", lobby.State); 
+        }
+
+        public async Task SendLocation(string lobbyName, int playerNumber, int topVal)
+        {
+            // get the lobby
+            _hubService.SendLocation(lobbyName, playerNumber, topVal);
         }
 
         //public async Task SendKey(int player, string key, string playerName)

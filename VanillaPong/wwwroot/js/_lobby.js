@@ -49,6 +49,7 @@ VP.Lobby = {
         // Server sent Lobby Update
         VP.Shared.Connection.on("LobbyUpdate", function (lobbies) {
             lobbies.forEach(function (lobby) {
+                VP.Lobby.LobbyName = lobby.name;
                 VP.Lobby.Element_LobbiesList.innerHTML +=
                     "<li>"
                     + lobby.name

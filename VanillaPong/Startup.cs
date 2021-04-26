@@ -30,6 +30,8 @@ namespace VanillaPong
             services.AddSingleton<HubState>();
             // add singleton for lobby state sender
             services.AddSingleton<LobbyStateSender>();
+            // add transient hub service
+            services.AddTransient<HubService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

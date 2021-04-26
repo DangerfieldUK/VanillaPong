@@ -30,6 +30,7 @@ VP.Game = {
     },
 
     StateUpdate: function () {
+        VP.Game.UpdateNamesAndScoresFromState();
         if (VP.Game.State.readyToStart === true && VP.Game.State.inPlay === false) {
             VP.Game.Element_StartPlay.style.display = 'block';
         }
@@ -38,8 +39,9 @@ VP.Game = {
     SetupListeners: function () {
         // Server sent lobby state update
         VP.Shared.Connection.on('StateUpdate', function (state) {
-            State = state;
+            VP.Game.State = state;
             VP.Game.StateUpdate();
+            
         });
     },
 
@@ -71,6 +73,45 @@ VP.Game = {
         }
     },
 
+    OpponentBat: function () {
+        switch (VP.Game.Player) {
+            case 1:
+                return VP.Game.Element_Player2_Paddle;
+
+            case 2:
+                return VP.Game.Element_Player1_Paddle;
+        }
+    },
+
+    OpponentLocations: function () {
+        switch (VP.Game.Player) {
+            case 1:
+                return VP.Game.State.player2Locations;
+
+            case 2:
+                return VP.Game.State.player1Locations;
+        }
+    },
+
+    OpponentLastLocTimeStamp: 0,
+
+    MoveOpponent: function () {
+        for (var i = 0; i < VP.Game.OpponentLocations().length; i++) {
+            var loc = VP.Game.OpponentLocations()[i];
+            if (VP.Game.OpponentLastLocTimeStamp === 0) {
+                VP.Game.OpponentLastLocTimeStamp = loc.timeStamp;
+                VP.Game.OpponentBat().style.top = loc.position + "px";
+            } else {
+                if (VP.Game.OpponentLastLocTimeStamp < loc.timeStamp) {
+                    VP.Game.OpponentLastLocTimeStamp = loc.timeStamp;
+                    VP.Game.OpponentBat().style.top = loc.position + "px";
+                    console.log(loc.position);
+                    break;
+                }
+            }
+        }
+    },
+
     MoveBat: function () {
         switch (VP.Game.PressedKey) {
             case 'UP':
@@ -88,13 +129,17 @@ VP.Game = {
     },
 
     SendServerBatLocation: function() {
-
+        var topVal = parseInt(VP.Game.MyBat().style.top, 10);
+        VP.Shared.Connection.invoke("SendLocation", VP.Lobby.LobbyName, VP.Game.Player, topVal).catch(function (err) {
+            return alert(err.toString());
+        });
     },
 
     ClientLoop: function () {
         VP.Game.CheckPressedKey();
         VP.Game.MoveBat();
         VP.Game.SendServerBatLocation();
+        VP.Game.MoveOpponent();
     },
 
     Init: function () {
@@ -104,31 +149,3 @@ VP.Game = {
         setInterval(VP.Game.ClientLoop, 10);
     }
 };
-
-
-
-
-
-
-////connection.start().then(function () {
-////    setInterval(gameThread, 10);
-////}).catch(function (err) {
-////    return console.error(err.toString());
-////});
-
-////function gameThread() {
-////    var pressedKey = '';
-////    if (pressedKeys[38] === true) {
-////        pressedKey = 'UP'
-////    }
-////    if (pressedKeys[40] === true) {
-////        pressedKey = 'DOWN'
-////    }
-////    connection.invoke("SendKey", parseInt(_playerId), pressedKey, _playerName).catch(function (err) {
-////        return console.error(err.toString());
-////    });
-////}
-
-
-
-
