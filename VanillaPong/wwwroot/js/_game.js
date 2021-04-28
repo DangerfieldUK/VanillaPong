@@ -33,6 +33,8 @@ VP.Game = {
         VP.Game.UpdateNamesAndScoresFromState();
         if (VP.Game.State.readyToStart === true && VP.Game.State.inPlay === false) {
             VP.Game.Element_StartPlay.style.display = 'block';
+        } else {
+            VP.Game.Element_StartPlay.style.display = 'none';
         }
     },
 
@@ -41,7 +43,6 @@ VP.Game = {
         VP.Shared.Connection.on('StateUpdate', function (state) {
             VP.Game.State = state;
             VP.Game.StateUpdate();
-
         });
     },
 
@@ -95,7 +96,8 @@ VP.Game = {
 
     OpponentLastLocTimeStamp: 0,
 
-    MoveOpponent: function () {
+    MoveObjects: function () {
+        var ballLocations = VP.Game.State.ballLocations;
         for (var i = 0; i < VP.Game.OpponentLocations().length; i++) {
             var loc = VP.Game.OpponentLocations()[i];
             if (VP.Game.OpponentLastLocTimeStamp === 0) {
@@ -108,10 +110,15 @@ VP.Game = {
                     break;
                 }
             }
+
+            if (ballLocations.length > i) {
+                VP.Game.Element_Ball.style.top = ballLocations[i].position + "px";
+                VP.Game.Element_Ball.style.left = ballLocations[i].positionX + "px";
+            }
         }
     },
 
-    MoveBat: function () {
+    KeyActions: function () {
         switch (VP.Game.PressedKey) {
             case 'UP':
                 var topVal = parseInt(VP.Game.MyBat().style.top, 10);
@@ -123,6 +130,15 @@ VP.Game = {
                 var topVal = parseInt(VP.Game.MyBat().style.top, 10);
                 if (topVal < 425)
                     VP.Game.MyBat().style.top = (topVal + 2) + "px";
+                break;
+
+            case 'SPACE':
+                if (VP.Game.State.readyToStart === true && VP.Game.State.inPlay === false) {
+                    console.log("START")
+                    VP.Shared.Connection.invoke("StartPlay", VP.Lobby.LobbyName, VP.Game.Player).catch(function (err) {
+                        return alert(err.toString());
+                    });
+                }
                 break;
         }
     },
@@ -142,9 +158,9 @@ VP.Game = {
 
     ClientLoop: function () {
         VP.Game.CheckPressedKey();
-        VP.Game.MoveBat();
+        VP.Game.KeyActions();
         VP.Game.SendServerBatLocation();
-        VP.Game.MoveOpponent();
+        VP.Game.MoveObjects();
     },
 
     Init: function () {

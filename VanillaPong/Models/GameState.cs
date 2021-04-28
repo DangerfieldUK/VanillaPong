@@ -16,29 +16,14 @@ namespace VanillaPong.Models
         public bool ReadyToStart { get; set; } = false;
         public bool InPlay { get; set; } = false;
 
-        public List<PlayerLocation> Player1Locations { get; set; } = new List<PlayerLocation>();
+        public List<Location> Player1Locations { get; set; } = new List<Location>();
 
-        public List<PlayerLocation> Player2Locations { get; set; } = new List<PlayerLocation>();
-
-        internal void Update()
-        {
-            Player1Locations = Player1Locations.Where(p => p.Sent == false).ToList();
-            Player2Locations = Player2Locations.Where(p => p.Sent == false).ToList();
-
-            //if (BallLeft < 0)
-            //    ballDirection = 4;
-            //if (BallLeft > 1000)
-            //    ballDirection = -4;
-            //BallLeft = BallLeft + ballDirection;
-
-            //if (BallTop < 0)
-            //    ballVDirection = 4;
-            //if (BallTop > 625)
-            //    ballVDirection = -4;
-            //BallTop = BallTop + ballVDirection;
-        }
-
-        //private int ballDirection { get; set; } = -4;
-        //private int ballVDirection { get; set; } = -4;
+        public List<Location> Player2Locations { get; set; } = new List<Location>();
+        public List<Location> BallLocations { get; set; } = new List<Location>();
+        public int LastPlayer1Position { get; internal set; }
+        public int LastPlayer2Position { get; internal set; }
+        public Location BallLastPosition { get; internal set; }
+        internal int ballDirection { get; set; } = 4;
+        internal int ballDirectionX { get; set; } = 4;
     }
 }

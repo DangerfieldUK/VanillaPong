@@ -66,5 +66,10 @@ namespace VanillaPong.Hubs
         {
             _hubService.SaveLocations(lobbyName, playerNumber, topVals);
         }
+
+        public async Task StartPlay(string lobbyName, int playerNumber)
+        {
+            _hubService.StartPlay(lobbyName, playerNumber);
+        }
     }
 }

@@ -25,15 +25,15 @@ namespace VanillaPong.GameCode
 
         protected void UpdateLobbies(object state)
         {
-            _hubService.UpdateLobbies();
             SendStates(_hubService.GetLobbies());
         }
         internal void SendStates(List<Lobby> lobbies)
         {
             foreach (var lobby in lobbies)
             {
+                _hubService.SimulateGame(lobby.Name);
                 _gameHubContext.Clients.Groups(lobby.Name).SendAsync("StateUpdate", lobby.State);
-                _hubService.MarkLocationsSent(lobby.Name);
+                _hubService.ClearSentLocations(lobby.Name);
             }
         }
     }

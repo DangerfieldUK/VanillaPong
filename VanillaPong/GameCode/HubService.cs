@@ -15,11 +15,23 @@ namespace VanillaPong.GameCode
         }
 
 
-        internal void MarkLocationsSent(string lobbyName)
+        internal void ClearSentLocations(string lobbyName)
         {
             var lobby = GetLobby(lobbyName);
-            lobby.State.Player1Locations = new List<PlayerLocation>();
-            lobby.State.Player2Locations = new List<PlayerLocation>();
+            if (lobby.State.Player1Locations.Any())
+            {
+                var lastPosition = lobby.State.Player1Locations.OrderByDescending(x => x.TimeStamp).First();
+                lobby.State.LastPlayer1Position = lastPosition.Position;
+            }
+            lobby.State.Player1Locations = new List<Location>();
+            if (lobby.State.Player2Locations.Any())
+            {
+                var lastPosition = lobby.State.Player2Locations.OrderByDescending(x => x.TimeStamp).First();
+                lobby.State.LastPlayer2Position = lastPosition.Position;
+            }
+            lobby.State.Player2Locations = new List<Location>();
+            lobby.State.BallLastPosition = lobby.State.BallLocations.Any() ? lobby.State.BallLocations.OrderByDescending(x => x.TimeStamp).First() : null;
+            lobby.State.BallLocations = new List<Location>();
         }
 
         internal List<Lobby> GetLobbies()
@@ -42,11 +54,50 @@ namespace VanillaPong.GameCode
             _hubState.Lobbies.Add(lobby);
         }
 
-        internal void UpdateLobbies()
+        internal void SimulateGame(string name)
         {
-            foreach (var lobby in _hubState.Lobbies)
+            var lobby = GetLobby(name);
+            var state = lobby.State;
+            if (state.InPlay)
             {
-                lobby.State.Update();
+                var timeStamp = DateTime.Now;
+                var past100Ms = timeStamp.Subtract(TimeSpan.FromMilliseconds(100));
+                var rand = new Random();
+                for (var i = 0; i < 10; i++)
+                {
+                    if (!state.BallLocations.Any() && state.BallLastPosition == null)
+                    {
+                        state.BallLocations.Add(new Location()
+                        {
+                            Position = 10 + rand.Next(605),
+                            PositionX = 20 + rand.Next(560),
+                            TimeStamp = past100Ms.AddMilliseconds(i * 10).Ticks
+                        });
+                        continue;
+                    }
+
+                    var lastloc = !state.BallLocations.Any() 
+                        ? state.BallLastPosition : 
+                        state.BallLocations.OrderByDescending(x => x.TimeStamp).First();
+
+                    // move ball
+                    var newLoc = lastloc.ShallowCopy();
+                    newLoc.TimeStamp = past100Ms.AddMilliseconds(i * 10).Ticks;
+                    // vertical
+                    if (newLoc.Position <= 0)
+                        state.ballDirection = 4;
+                    if (newLoc.Position >= 605)
+                        state.ballDirection = -4;
+                    newLoc.Position = newLoc.Position + state.ballDirection;
+                    // horizontal
+                    if (newLoc.PositionX < 0)
+                        state.ballDirectionX = 4;
+                    if (newLoc.PositionX >= 980)
+                        state.ballDirectionX = -4;
+                    newLoc.PositionX = newLoc.PositionX + state.ballDirectionX;
+                    // add to history
+                    state.BallLocations.Add(newLoc);
+                }
             }
         }
 
@@ -65,10 +116,10 @@ namespace VanillaPong.GameCode
         {
             var lobby = GetLobby(lobbyName);
             var timeStamp = DateTime.Now.Subtract(TimeSpan.FromMilliseconds(locations.Length * 10));
-            var playerLocations = new List<PlayerLocation>();
+            var playerLocations = new List<Location>();
             foreach (var loc in locations)
             {
-                playerLocations.Add(new PlayerLocation()
+                playerLocations.Add(new Location()
                 {
                     Position = loc,
                     TimeStamp = timeStamp.Ticks
@@ -84,6 +135,14 @@ namespace VanillaPong.GameCode
                 case 2:
                     lobby.State.Player2Locations.AddRange(playerLocations);
                     break;
+            }
+        }
+
+        internal void StartPlay(string lobbyName, int playerNumber)
+        {
+            if (GetLobby(lobbyName).State.InPlay == false && GetLobby(lobbyName).State.ReadyToStart == true)
+            {
+                GetLobby(lobbyName).State.InPlay = true;
             }
         }
     }
