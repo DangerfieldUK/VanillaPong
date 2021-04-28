@@ -34,6 +34,11 @@ namespace VanillaPong.GameCode
             lobby.State.BallLocations = new List<Location>();
         }
 
+        internal void RemoveDeadLobbies()
+        {
+            _hubState.Lobbies = _hubState.Lobbies.Where(x => x.RemoveMe == false).ToList();
+        }
+
         internal List<Lobby> GetLobbies()
         {
             return _hubState.Lobbies;
@@ -146,6 +151,7 @@ namespace VanillaPong.GameCode
         internal void SaveLocations(string lobbyName, int playerNumber, int[] locations)
         {
             var lobby = GetLobby(lobbyName);
+            lobby.LastUpdate = DateTime.Now;
             var timeStamp = DateTime.Now.Subtract(TimeSpan.FromMilliseconds(locations.Length * 10));
             var playerLocations = new List<Location>();
             foreach (var loc in locations)
