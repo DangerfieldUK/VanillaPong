@@ -65,6 +65,8 @@ namespace VanillaPong.GameCode
                 var rand = new Random();
                 for (var i = 0; i < 10; i++)
                 {
+                    if (!state.InPlay)
+                        break;
                     if (!state.BallLocations.Any() && state.BallLastPosition == null)
                     {
                         state.BallLocations.Add(new Location()
@@ -76,8 +78,8 @@ namespace VanillaPong.GameCode
                         continue;
                     }
 
-                    var lastloc = !state.BallLocations.Any() 
-                        ? state.BallLastPosition : 
+                    var lastloc = !state.BallLocations.Any()
+                        ? state.BallLastPosition :
                         state.BallLocations.OrderByDescending(x => x.TimeStamp).First();
 
                     // move ball
@@ -97,6 +99,35 @@ namespace VanillaPong.GameCode
                     newLoc.PositionX = newLoc.PositionX + state.ballDirectionX;
                     // add to history
                     state.BallLocations.Add(newLoc);
+
+                    if (newLoc.PositionX <= 4)
+                    {
+                        var pos = state.LastPlayer1Position;
+                        if (state.Player1Locations.Any())
+                        {
+                            pos = state.Player1Locations.Count() > i ? state.Player1Locations.OrderBy(x => x.TimeStamp).Skip(i).First().Position : state.Player1Locations.OrderBy(x => x.TimeStamp).Last().Position;
+                        }
+                        if (newLoc.Position < pos - 19 || newLoc.Position > pos + 199)
+                        {
+                            state.Player2Scores = true;
+                            state.Player2Score++;
+                            state.InPlay = false;
+                        }
+                    }
+                    if (newLoc.PositionX >= 976)
+                    {
+                        var pos = state.LastPlayer2Position;
+                        if (state.Player2Locations.Any())
+                        {
+                            pos = state.Player2Locations.Count() > i ? state.Player2Locations.OrderBy(x => x.TimeStamp).Skip(i).First().Position : state.Player2Locations.OrderBy(x => x.TimeStamp).Last().Position;
+                        }
+                        if (newLoc.Position < pos - 19 || newLoc.Position > pos + 199)
+                        {
+                            state.Player1Scores = true;
+                            state.Player1Score++;
+                            state.InPlay = false;
+                        }
+                    }
                 }
             }
         }

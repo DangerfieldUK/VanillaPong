@@ -15,6 +15,8 @@ namespace VanillaPong.Models
         public string Player2Name { get; set; } = "Awaiting player...";
         public bool ReadyToStart { get; set; } = false;
         public bool InPlay { get; set; } = false;
+        public bool Player1Scores { get; set; } = false;
+        public bool Player2Scores { get; set; } = false;
 
         public List<Location> Player1Locations { get; set; } = new List<Location>();
 
