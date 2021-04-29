@@ -42,22 +42,6 @@ button {
         left: 499px;
     }
 
-    .game #startplay {
-        text-align: left;
-        padding: 40px;
-    }
-
-        .game #startplay.p2 {
-            text-align: right;
-        }
-
-        .game #startplay h2 {
-            border: 1px solid white;
-            background: black;
-            display: inline-block;
-            padding: 10px;
-        }
-
     .game .ball {
         display: block;
         width: 1px;
@@ -81,6 +65,21 @@ button {
         .game .player.player2 {
             right: 0;
         }
+
+/* startplay */
+.startplay {
+    text-align: center;
+    position: relative;
+    top: 300px;
+    z-index: 1;
+}
+
+    .startplay h2 {
+        border: 1px solid white;
+        background: black;
+        display: inline-block;
+        padding: 10px;
+    }
 
 /* scores */
 .scores {

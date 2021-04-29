@@ -77,9 +77,13 @@ namespace VanillaPong.GameCode
                         state.BallLocations.Add(new Location()
                         {
                             Position = 10 + rand.Next(605),
-                            PositionX = 20 + rand.Next(560),
+                            PositionX = 20 + rand.Next(980),
                             TimeStamp = past100Ms.AddMilliseconds(i * 10).Ticks
                         });
+                        if (state.BallLocations.Single().PositionX < 500)
+                            state.ballDirectionX = 4;
+                        else
+                            state.ballDirectionX = -4;
                         continue;
                     }
 
@@ -104,6 +108,8 @@ namespace VanillaPong.GameCode
                     newLoc.PositionX = newLoc.PositionX + state.ballDirectionX;
                     // add to history
                     state.BallLocations.Add(newLoc);
+
+
 
                     if (newLoc.PositionX <= 4)
                     {
